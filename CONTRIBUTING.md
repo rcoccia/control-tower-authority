@@ -7,6 +7,10 @@ the affected policy version, its digest in `manifest.json`, and any stable
 property identifiers. `@rcoccia` must approve changes covered by
 `CODEOWNERS`. The validation workflow must pass before merge.
 
+Generic interview skills are distributed with Control Tower (or a future
+organization-specific kit), not this Authority repository. Do not add skills
+or runtime skill-download mechanisms here.
+
 ## Releases
 
 Use semantic versions: increment PATCH for clarifications that preserve policy

@@ -27,12 +27,6 @@ REQUIRED_HEADINGS = (
     "Exceptions and waivers",
     "Progressive disclosure",
 )
-REQUIRED_SKILLS = {
-    "classify-data",
-    "assess-cloud-workload",
-    "assess-security-boundary",
-    "request-policy-waiver",
-}
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -147,45 +141,6 @@ def validate_markdown(
             errors.append(f"{policy_id}: missing stable property anchor {property_id!r}")
 
 
-def parse_frontmatter(path: Path, errors: list[str]) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        errors.append(f"{path}: missing frontmatter opening delimiter")
-        return {}
-    end = text.find("\n---\n", 4)
-    if end < 0:
-        errors.append(f"{path}: missing frontmatter closing delimiter")
-        return {}
-    fields: dict[str, str] = {}
-    for line in text[4:end].splitlines():
-        key, separator, value = line.partition(":")
-        if not separator or not key or not value.strip() or key in fields:
-            errors.append(f"{path}: invalid frontmatter field")
-            return {}
-        fields[key] = value.strip()
-    if set(fields) != {"name", "description"}:
-        errors.append(f"{path}: frontmatter must contain only name and description")
-    return fields
-
-
-def validate_skills(root: Path, errors: list[str]) -> None:
-    skills_root = root / ".github" / "skills"
-    for name in REQUIRED_SKILLS:
-        skill_path = skills_root / name / "SKILL.md"
-        if not skill_path.is_file():
-            errors.append(f"missing required skill {name}")
-            continue
-        fields = parse_frontmatter(skill_path, errors)
-        if fields.get("name") != name:
-            errors.append(f"{skill_path}: frontmatter name must be {name!r}")
-        content = skill_path.read_text(encoding="utf-8")
-        required_statement = (
-            "does **not** select mandatory policy, grant a waiver, or author normative policy."
-        )
-        if required_statement not in " ".join(content.split()):
-            errors.append(f"{skill_path}: missing advisory-only boundary statement")
-
-
 def validate_repository(root: Path) -> list[str]:
     root = root.resolve()
     errors: list[str] = []
@@ -284,7 +239,6 @@ def validate_repository(root: Path) -> list[str]:
             errors.append(f"{policy_id}: fact_dependencies must exactly match rule facts")
     if policy_ids != EXPECTED_POLICY_IDS:
         errors.append("manifest must contain exactly CCA-001, SEC-014, DR-009, and FIN-006")
-    validate_skills(root, errors)
     return errors
 
 
