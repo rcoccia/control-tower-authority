@@ -79,6 +79,11 @@ class ValidateAuthorityTests(unittest.TestCase):
             self.assertIn(service, policy_text)
         for region in ("West Europe", "North Europe"):
             self.assertIn(region, policy_text)
+        self.assertIn(
+            "`assess-cloud-workload` skill supplied by their Control Tower kit or distribution",
+            policy_text,
+        )
+        self.assertNotIn(".github/skills/", policy_text)
 
     def test_skill_directory_is_not_required(self) -> None:
         shutil.rmtree(self.root / ".github" / "skills", ignore_errors=True)

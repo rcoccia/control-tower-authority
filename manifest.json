@@ -7,7 +7,7 @@
       "version": "1.1.0",
       "effect": "mandatory",
       "path": "policies/cloud/CCA-001.md",
-      "sha256": "1cfe0b504e1ed969d22dc4dfafb3293f11daa57ca639f6f50d53cbacfd5bd9c6",
+      "sha256": "a8aab109698e692923165887dbe1c1e36ed549839e123f5703db01ec333ee2ba",
       "properties": [
         "cca-001-approved-services",
         "cca-001-approved-regions",
