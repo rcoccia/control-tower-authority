@@ -2,9 +2,13 @@
 
 This public repository is a **simulated external issuer** for bounded Control
 Tower experiments. It publishes concise synthetic policies, a machine-readable
-catalog, and advisory interview skills. It is not a Control Tower product
-runtime and contains no matcher, signatures, GitHub App, waiver engine, or
-multi-Authority protocol.
+catalog. It is not a Control Tower product runtime and contains no interview
+skills, runtime skill downloading, matcher, signatures, GitHub App, waiver
+engine, or multi-Authority protocol.
+
+Consumers obtain generic interview skills from their Control Tower distribution
+or a future organization-specific kit. This repository is authoritative only
+for policy documents and catalog bytes.
 
 ## Anonymous read model
 
@@ -25,13 +29,13 @@ SHA-256 is over policy bytes decoded as UTF-8 without a BOM, with CRLF and bare
 CR line endings canonicalized to LF; all other bytes, including final-newline
 semantics, are preserved. Invalid UTF-8 and BOM-prefixed files are rejected.
 The validator checks this digest contract, catalog structure, tracked files,
-property anchors, and advisory skills.
+property anchors.
 
 ## Owner and write model
 
 Policy owners change the repository only through pull requests. `CODEOWNERS`
-assigns `@rcoccia` ownership of policies, the catalog, skills, and validation
-scripts. Branch protection and required review are repository governance
+assigns `@rcoccia` ownership of policies, the catalog, and validation scripts.
+Branch protection and required review are repository governance
 controls configured on the default branch; see
 [CONTRIBUTING.md](CONTRIBUTING.md) for the release process.
 

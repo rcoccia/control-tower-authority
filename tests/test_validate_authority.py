@@ -62,6 +62,10 @@ class ValidateAuthorityTests(unittest.TestCase):
     def test_golden_repository_passes(self) -> None:
         self.assertEqual(VALIDATOR.validate_repository(self.root), [])
 
+    def test_skill_directory_is_not_required(self) -> None:
+        shutil.rmtree(self.root / ".github" / "skills", ignore_errors=True)
+        self.assertEqual(VALIDATOR.validate_repository(self.root), [])
+
     def test_canonical_digest_ignores_line_ending_representation(self) -> None:
         lf_bytes = b"# Demo\n\nA policy line.\n"
         crlf_bytes = b"# Demo\r\n\r\nA policy line.\r\n"
