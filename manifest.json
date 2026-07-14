@@ -1,0 +1,136 @@
+{
+  "schema_version": "0.1.0",
+  "authority_id": "github:rcoccia/control-tower-authority",
+  "policies": [
+    {
+      "id": "CCA-001",
+      "version": "1.0.0",
+      "effect": "mandatory",
+      "path": "policies/cloud/CCA-001.md",
+      "sha256": "a0bae28e829649109bf3e76723eaf44f860b40142cd65f47a270401703eff570",
+      "properties": [
+        "cca-001-approved-services",
+        "cca-001-approved-regions",
+        "cca-001-managed-identity",
+        "cca-001-private-data",
+        "cca-001-bicep"
+      ],
+      "applicability": {
+        "fact_dependencies": [
+          "platform"
+        ],
+        "rule": {
+          "all": [
+            {
+              "equals": [
+                "platform",
+                "azure"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "SEC-014",
+      "version": "1.0.0",
+      "effect": "mandatory",
+      "path": "policies/security/SEC-014.md",
+      "sha256": "ab0d3deeae28d8865cac97c769a4302057abe32f95b3b08643aa741bd4efed1f",
+      "properties": [
+        "sec-014-tls",
+        "sec-014-entra-status-api",
+        "sec-014-es256-jwks",
+        "sec-014-replay",
+        "sec-014-safe-logging"
+      ],
+      "applicability": {
+        "fact_dependencies": [
+          "platform",
+          "internet_ingress"
+        ],
+        "rule": {
+          "all": [
+            {
+              "equals": [
+                "platform",
+                "azure"
+              ]
+            },
+            {
+              "equals": [
+                "internet_ingress",
+                true
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "DR-009",
+      "version": "1.0.0",
+      "effect": "mandatory",
+      "path": "policies/data/DR-009.md",
+      "sha256": "6bfc19f899c3b4698afe9fec4c0975a8c086531ffed08d3341ae90e8bdd15413",
+      "properties": [
+        "dr-009-confidential-classification",
+        "dr-009-eu-residency",
+        "dr-009-no-third-party-transfer",
+        "dr-009-retention"
+      ],
+      "applicability": {
+        "fact_dependencies": [
+          "data_classification",
+          "jurisdiction"
+        ],
+        "rule": {
+          "all": [
+            {
+              "equals": [
+                "data_classification",
+                "confidential"
+              ]
+            },
+            {
+              "equals": [
+                "jurisdiction",
+                "EU"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "FIN-006",
+      "version": "1.0.0",
+      "effect": "mandatory",
+      "path": "policies/finops/FIN-006.md",
+      "sha256": "2859a9314967434449a095e615af04ecb2d2a9d3f8b00f90f66a2d27f9192c6a",
+      "properties": [
+        "fin-006-eur-100-cap",
+        "fin-006-eighty-percent-alert",
+        "fin-006-reestimate"
+      ],
+      "applicability": {
+        "fact_dependencies": [
+          "environment"
+        ],
+        "rule": {
+          "all": [
+            {
+              "in": [
+                "environment",
+                [
+                  "dev",
+                  "test"
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
