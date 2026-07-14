@@ -4,10 +4,10 @@
   "policies": [
     {
       "id": "CCA-001",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "effect": "mandatory",
       "path": "policies/cloud/CCA-001.md",
-      "sha256": "70fc31485b7997ee6445c3d3b0ef7f655553296ddc8354e21e587b11b9cf96d4",
+      "sha256": "1cfe0b504e1ed969d22dc4dfafb3293f11daa57ca639f6f50d53cbacfd5bd9c6",
       "properties": [
         "cca-001-approved-services",
         "cca-001-approved-regions",
