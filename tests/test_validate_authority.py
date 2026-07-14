@@ -62,6 +62,29 @@ class ValidateAuthorityTests(unittest.TestCase):
     def test_golden_repository_passes(self) -> None:
         self.assertEqual(VALIDATOR.validate_repository(self.root), [])
 
+    def test_cca_001_publishes_authorized_azure_catalog(self) -> None:
+        manifest = self.manifest()
+        cca_001 = next(policy for policy in manifest["policies"] if policy["id"] == "CCA-001")
+        policy_text = " ".join(
+            (self.root / cca_001["path"]).read_text(encoding="utf-8").split()
+        )
+
+        self.assertEqual(cca_001["version"], "1.1.0")
+        self.assertIn("Azure Container Apps for compute", policy_text)
+        for service in (
+            "Azure Cosmos DB serverless",
+            "Azure Storage Table",
+            "Azure SQL Database serverless",
+        ):
+            self.assertIn(service, policy_text)
+        for region in ("West Europe", "North Europe"):
+            self.assertIn(region, policy_text)
+        self.assertIn(
+            "`assess-cloud-workload` skill supplied by their Control Tower kit or distribution",
+            policy_text,
+        )
+        self.assertNotIn(".github/skills/", policy_text)
+
     def test_skill_directory_is_not_required(self) -> None:
         shutil.rmtree(self.root / ".github" / "skills", ignore_errors=True)
         self.assertEqual(VALIDATOR.validate_repository(self.root), [])
