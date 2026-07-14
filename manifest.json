@@ -7,7 +7,7 @@
       "version": "1.0.0",
       "effect": "mandatory",
       "path": "policies/cloud/CCA-001.md",
-      "sha256": "a0bae28e829649109bf3e76723eaf44f860b40142cd65f47a270401703eff570",
+      "sha256": "70fc31485b7997ee6445c3d3b0ef7f655553296ddc8354e21e587b11b9cf96d4",
       "properties": [
         "cca-001-approved-services",
         "cca-001-approved-regions",
@@ -36,7 +36,7 @@
       "version": "1.0.0",
       "effect": "mandatory",
       "path": "policies/security/SEC-014.md",
-      "sha256": "ab0d3deeae28d8865cac97c769a4302057abe32f95b3b08643aa741bd4efed1f",
+      "sha256": "047e5c6e6a5c9d16a31229c7b23fb31c43e24383f9dd8ab44ff97a5be49baef6",
       "properties": [
         "sec-014-tls",
         "sec-014-entra-status-api",
@@ -72,7 +72,7 @@
       "version": "1.0.0",
       "effect": "mandatory",
       "path": "policies/data/DR-009.md",
-      "sha256": "6bfc19f899c3b4698afe9fec4c0975a8c086531ffed08d3341ae90e8bdd15413",
+      "sha256": "d65e50fc2296a1a54798fef49a77dd638bfbca7d613aa71718c2f04ce0a9155e",
       "properties": [
         "dr-009-confidential-classification",
         "dr-009-eu-residency",
@@ -107,7 +107,7 @@
       "version": "1.0.0",
       "effect": "mandatory",
       "path": "policies/finops/FIN-006.md",
-      "sha256": "2859a9314967434449a095e615af04ecb2d2a9d3f8b00f90f66a2d27f9192c6a",
+      "sha256": "02ce66dbcf82d16553da95d39467dc1a590ac6975325f0cf0304d6e1c0a3f0d5",
       "properties": [
         "fin-006-eur-100-cap",
         "fin-006-eighty-percent-alert",

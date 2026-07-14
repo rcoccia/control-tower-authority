@@ -18,11 +18,15 @@ new version rather than moving or rewriting one.
 ## Consumer pinning
 
 Consumers pin a release tag **and** its resolved commit, retain the
-`manifest.json` policy SHA-256 values, and validate the checked-out bytes:
+`manifest.json` policy SHA-256 values, and validate canonical policy bytes:
 
 ```text
-tag -> immutable commit -> manifest digest -> policy bytes
+tag -> immutable commit -> manifest digest -> UTF-8/LF policy bytes
 ```
+
+The digest contract rejects UTF-8 BOMs and invalid UTF-8, canonicalizes CRLF
+and bare CR line endings to LF, and preserves all other bytes, including final
+newlines. `.gitattributes` enforces LF checkout for repository text.
 
 This process provides demonstrable GitHub repository provenance only; it does
 not create legal or cryptographic institutional authenticity.

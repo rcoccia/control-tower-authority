@@ -62,6 +62,14 @@ class ValidateAuthorityTests(unittest.TestCase):
     def test_golden_repository_passes(self) -> None:
         self.assertEqual(VALIDATOR.validate_repository(self.root), [])
 
+    def test_canonical_digest_ignores_line_ending_representation(self) -> None:
+        lf_bytes = b"# Demo\n\nA policy line.\n"
+        crlf_bytes = b"# Demo\r\n\r\nA policy line.\r\n"
+        self.assertEqual(
+            VALIDATOR.canonical_policy_digest(lf_bytes),
+            VALIDATOR.canonical_policy_digest(crlf_bytes),
+        )
+
     def test_blocks_digest_mismatch(self) -> None:
         path = self.root / "policies" / "cloud" / "CCA-001.md"
         path.write_text(path.read_text(encoding="utf-8") + "\nchanged\n", encoding="utf-8")

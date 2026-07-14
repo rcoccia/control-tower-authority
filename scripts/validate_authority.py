@@ -41,6 +41,21 @@ def is_literal(value: Any) -> bool:
     return isinstance(value, (str, bool))
 
 
+def canonical_policy_bytes(raw_bytes: bytes) -> bytes:
+    """Return UTF-8 policy bytes with every line ending represented as LF."""
+    if raw_bytes.startswith(b"\xef\xbb\xbf"):
+        raise ValueError("policy bytes must not include a UTF-8 BOM")
+    try:
+        raw_bytes.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ValueError("policy bytes must be valid UTF-8") from exc
+    return raw_bytes.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
+def canonical_policy_digest(raw_bytes: bytes) -> str:
+    return hashlib.sha256(canonical_policy_bytes(raw_bytes)).hexdigest()
+
+
 def tracked(root: Path, relative_path: str) -> bool:
     result = subprocess.run(
         ["git", "-C", str(root), "ls-files", "--error-unmatch", "--", relative_path],
@@ -116,8 +131,10 @@ def facts_in_rule(rule: Any, errors: list[str], location: str) -> set[str]:
     return {fact}
 
 
-def validate_markdown(path: Path, policy_id: str, properties: list[Any], errors: list[str]) -> None:
-    text = path.read_text(encoding="utf-8")
+def validate_markdown(
+    canonical_bytes: bytes, policy_id: str, properties: list[Any], errors: list[str]
+) -> None:
+    text = canonical_bytes.decode("utf-8")
     if "# " not in text or "SYNTHETIC DEMO POLICY" not in text:
         errors.append(f"{policy_id}: missing policy title or synthetic demo label")
     for heading in REQUIRED_HEADINGS:
@@ -234,10 +251,17 @@ def validate_repository(root: Path) -> list[str]:
             property_ids.add(property_id)
         path = policy_path(root, policy["path"], errors, policy_id)
         if path is not None:
-            actual_digest = hashlib.sha256(path.read_bytes()).hexdigest()
-            if actual_digest != policy["sha256"]:
-                errors.append(f"{policy_id}: SHA-256 does not match policy bytes")
-            validate_markdown(path, policy_id, properties, errors)
+            try:
+                canonical_bytes = canonical_policy_bytes(path.read_bytes())
+            except ValueError as exc:
+                errors.append(f"{policy_id}: {exc}")
+            else:
+                actual_digest = hashlib.sha256(canonical_bytes).hexdigest()
+                if actual_digest != policy["sha256"]:
+                    errors.append(
+                        f"{policy_id}: SHA-256 does not match canonical UTF-8 LF policy bytes"
+                    )
+                validate_markdown(canonical_bytes, policy_id, properties, errors)
 
         applicability = policy["applicability"]
         if not isinstance(applicability, dict) or set(applicability) != {

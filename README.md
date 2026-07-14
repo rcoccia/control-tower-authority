@@ -20,9 +20,12 @@ policy:    policies/data/DR-009.md
 sha256:    <manifest policy sha256>
 ```
 
-For a local copy, run `python scripts/validate_authority.py`. The validator
-checks policy bytes, catalog structure, tracked files, property anchors, and
-advisory skills.
+For a local copy, run `python scripts/validate_authority.py`. Each manifest
+SHA-256 is over policy bytes decoded as UTF-8 without a BOM, with CRLF and bare
+CR line endings canonicalized to LF; all other bytes, including final-newline
+semantics, are preserved. Invalid UTF-8 and BOM-prefixed files are rejected.
+The validator checks this digest contract, catalog structure, tracked files,
+property anchors, and advisory skills.
 
 ## Owner and write model
 
