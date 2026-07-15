@@ -85,6 +85,44 @@ class ValidateAuthorityTests(unittest.TestCase):
         )
         self.assertNotIn(".github/skills/", policy_text)
 
+    def test_dr_009_distinguishes_active_and_backup_payload_retention(self) -> None:
+        manifest = self.manifest()
+        dr_009 = next(policy for policy in manifest["policies"] if policy["id"] == "DR-009")
+        policy_text = " ".join(
+            (self.root / dr_009["path"]).read_text(encoding="utf-8").split()
+        )
+
+        self.assertEqual(dr_009["version"], "1.1.0")
+        self.assertIn(
+            "Retain payloads in active or queryable storage for no more than 30 days.",
+            policy_text,
+        )
+        self.assertIn(
+            "Provider-managed backup or PITR copies may contain expired payloads only for the configured technical backup-retention period",
+            policy_text,
+        )
+        self.assertIn(
+            "remain within approved EU regions, are inaccessible to normal application or query paths, and are restricted to controlled recovery.",
+            policy_text,
+        )
+        self.assertIn(
+            "This is not a waiver and does not permit ordinary access after 30 days.",
+            policy_text,
+        )
+        self.assertIn(
+            "Before restored data is exposed to normal service access, re-apply the active 30-day payload retention and the 180-day payload-free audit/receipt retention/deletion rules.",
+            policy_text,
+        )
+        self.assertIn(
+            "Record recovery authorization and access, restore processing, and post-restore deletion/reconciliation evidence.",
+            policy_text,
+        )
+        self.assertIn(
+            "`classify-data` skill supplied by the Control Tower kit or distribution",
+            policy_text,
+        )
+        self.assertNotIn(".github/skills/", policy_text)
+
     def test_skill_directory_is_not_required(self) -> None:
         shutil.rmtree(self.root / ".github" / "skills", ignore_errors=True)
         self.assertEqual(VALIDATOR.validate_repository(self.root), [])

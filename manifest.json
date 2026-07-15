@@ -69,10 +69,10 @@
     },
     {
       "id": "DR-009",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "effect": "mandatory",
       "path": "policies/data/DR-009.md",
-      "sha256": "d65e50fc2296a1a54798fef49a77dd638bfbca7d613aa71718c2f04ce0a9155e",
+      "sha256": "acc04068f245a22cc7d6b736eb5132b2d75d3017726848d21d29c6158b8fdfbc",
       "properties": [
         "dr-009-confidential-classification",
         "dr-009-eu-residency",
